@@ -1,5 +1,4 @@
 pub mod interfaces {
-    pub mod ierc20;
     pub mod istreamfi;
 }
 

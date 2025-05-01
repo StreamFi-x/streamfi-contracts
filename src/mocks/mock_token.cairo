@@ -1,6 +1,6 @@
 #[starknet::contract]
 pub mod MockToken {
-    use starknet::{ContractAddress, get_caller_address};
+    use starknet::{ContractAddress};
     use openzeppelin::token::erc20::{ERC20Component, ERC20HooksEmptyImpl};
 
     component!(path: ERC20Component, storage: erc20, event: ERC20Event);

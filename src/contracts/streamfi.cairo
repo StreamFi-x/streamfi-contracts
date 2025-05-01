@@ -5,7 +5,7 @@ pub mod StreamFi {
     use streamfi_contracts::interfaces::istreamfi::IStreamFi;
     // use streamfi_contracts::interfaces::ierc20::{IERC20Dispatcher, IERC20DispatcherTrait};
     use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
-    use starknet::{contract_address_const, ContractAddress, get_caller_address, get_contract_address};
+    use starknet::{ContractAddress, get_caller_address};
     use core::num::traits::zero::Zero;
     use starknet::storage::{StoragePathEntry, StoragePointerWriteAccess, StoragePointerReadAccess, Map};
 

@@ -4,7 +4,7 @@ use snforge_std::{
     declare, ContractClassTrait, DeclareResultTrait, DeclareResult, start_cheat_caller_address,
     stop_cheat_caller_address, spy_events, EventSpyAssertionsTrait,
 };
-use streamfi_contracts::interfaces::ierc20::{IERC20Dispatcher, IERC20DispatcherTrait};
+use openzeppelin::token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 use streamfi_contracts::interfaces::istreamfi::{IStreamFiDispatcher, IStreamFiDispatcherTrait};
 
 fn deploy_streamfi(token_address: ContractAddress) -> (ContractAddress, IStreamFiDispatcher) {
