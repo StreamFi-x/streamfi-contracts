@@ -44,7 +44,6 @@ pub mod StreamFi {
             assert(!recipient.is_zero(), 'Zero Address Recipient');
             
             let token_address = self.token.read();
-            let this_contract = get_contract_address();
             let token = IERC20Dispatcher { contract_address: token_address };
 
             let user_token_balance = token.balance_of(sender);
