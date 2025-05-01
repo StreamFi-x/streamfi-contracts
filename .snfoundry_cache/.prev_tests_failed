@@ -1,1 +1,0 @@
-streamfi_contracts_integrationtest::test_streamfi::test_transfer_tokens_to_zero_address_should_fail
