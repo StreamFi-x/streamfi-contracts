@@ -1,6 +1,6 @@
 # Contract Roadmap
 
-The contracts we want to build, in rough priority order. Grab one and open a PR.
+The contracts that ship in the initial cut of StreamFi's on-chain layer, and what comes next.
 
 ## Shipped
 
@@ -8,25 +8,23 @@ The contracts we want to build, in rough priority order. Grab one and open a PR.
 
 Per-creator subscription tiers with one-time time-bounded purchases. Payment via a Stellar Asset Contract (USDC). Read-only `is_active(subscriber, creator)` for the backend to gate signed Mux playback tokens on subscribers-only streams.
 
-## Next up
+### `tip-goal-escrow` ✅
 
-### `tip-goal-escrow`
-
-Kickstarter-style tip goals. Creator sets a goal (amount, deadline). Tippers contribute into the contract. If the goal is met by the deadline, funds release to the creator. If not, tippers can withdraw their contribution.
+Kickstarter-style tip goals. Creator sets a goal (amount, deadline). Tippers contribute into the contract (funds held in escrow at the contract address). If the goal is met by the deadline, `claim()` releases funds to the creator. If not, each tipper calls `refund()` to withdraw their contribution.
 
 Why it matters: gives tippers real confidence that a big tip toward a specific outcome (new mic, new PC, charity drive) is not just going to disappear.
 
-### `revenue-split`
+### `revenue-split` ✅
 
-Multi-host tip split. When a stream has co-hosts, tips land in the contract and get atomically split between hosts by a preconfigured percentage. No manual reconciliation, no "one person collects and Venmos everyone."
+Multi-recipient atomic tip split by basis points. When a stream has co-hosts, each tip lands via `pay()` and gets atomically distributed between recipients (up to 10) with a bps configuration that must sum to exactly 10 000. Rounding remainder goes to the last recipient — no lost dust. No manual reconciliation, no "one person collects and Venmos everyone."
 
-### `token-gated-access`
+### `token-gated-access` ✅
 
-Mint a Stellar asset representing membership. Contract exposes `has_access(holder)` that the StreamFi backend checks before minting a signed Mux JWT. Ties on-chain ownership to real-world stream access.
+Per-creator paid "access gates" for exclusive content. Viewers `purchase()` a gate — the fee transfers directly to the creator and grants a permanent (`duration_secs = 0`) or time-bounded access record. The backend calls read-only `has_access(gate_id, holder)` before minting a signed Mux JWT. Creators can `revoke()` if needed.
 
-### `payout-scheduler`
+### `payout-scheduler` ✅
 
-Creator sets rules (min balance, cadence). The contract auto-sweeps accumulated tips to the creator's wallet on schedule. Reduces manual payout ops.
+Creators configure a payout schedule (destination, minimum balance, cadence). External payments flow into a pool via `deposit()`. Anyone can `trigger_payout()` once the cadence has elapsed and the pool is at or above the minimum — the full pool sweeps to the destination and the cadence resets. Reduces manual payout ops and lets bots/keepers automate sweeps.
 
 ## Later
 

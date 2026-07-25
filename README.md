@@ -4,22 +4,22 @@ Soroban smart contracts that power on-chain features of [StreamFi](https://strea
 
 ## Status
 
-Early. First contract is `subscription`, which handles per-creator subscription tiers, one-time time-bounded purchases, and access checks that the StreamFi backend calls before issuing signed Mux playback tokens.
+Five contracts shipped covering the initial on-chain surface: subscriptions, tip goals with escrow, atomic revenue splits, paid access gates, and scheduled payouts. All contracts are independently deployable and share no runtime dependencies.
 
 ## Repository layout
 
 ```
 streamfi-contracts/
 ├── contracts/
-│   └── subscription/       # Per-creator subscription escrow
-│       ├── src/
-│       │   ├── lib.rs
-│       │   └── test.rs
-│       └── Cargo.toml
-├── docs/                   # Design notes and roadmap
-├── Cargo.toml              # Workspace root
-├── rust-toolchain.toml     # Pinned toolchain
-└── .github/                # CI + issue templates
+│   ├── subscription/         # Per-creator subscription tiers
+│   ├── tip-goal-escrow/      # Kickstarter-style tip goals
+│   ├── revenue-split/        # Atomic multi-recipient splits
+│   ├── token-gated-access/   # Paid access gates for exclusive content
+│   └── payout-scheduler/     # Cadence-based auto-sweep payouts
+├── docs/                     # Design notes and roadmap
+├── Cargo.toml                # Workspace root
+├── rust-toolchain.toml       # Pinned toolchain
+└── .github/                  # CI + issue templates
 ```
 
 ## Requirements
@@ -70,17 +70,19 @@ stellar contract invoke \
 
 | Contract | Purpose | Status |
 |----------|---------|--------|
-| `subscription` | Per-creator subscription tiers + access checks | ✅ MVP |
-| `tip-goal-escrow` | Kickstarter-style tip goals with auto-refund | ⏳ Planned |
-| `revenue-split` | Atomic tip split between multi-host streams | ⏳ Planned |
-| `token-gated-access` | Membership-token gate for private streams | ⏳ Planned |
-| `payout-scheduler` | Automated creator payouts on cadence | ⏳ Planned |
+| `subscription` | Per-creator subscription tiers + access checks | ✅ Shipped |
+| `tip-goal-escrow` | Kickstarter-style tip goals with escrow + refund | ✅ Shipped |
+| `revenue-split` | Atomic multi-recipient split by basis points | ✅ Shipped |
+| `token-gated-access` | Paid access gates (permanent or time-bounded) | ✅ Shipped |
+| `payout-scheduler` | Cadence-based auto-sweep from creator pool | ✅ Shipped |
 
 See [docs/roadmap.md](docs/roadmap.md) for details.
 
 ## Integration with StreamFi
 
-The backend (see [streamfi-frontend](https://github.com/StreamFi-x/streamfi-frontend)) calls the contract's read-only `is_active(subscriber, creator)` before issuing a signed Mux playback token for subscribers-only streams. This gives us CDN-level access enforcement backed by on-chain state.
+The backend (see [streamfi-frontend](https://github.com/StreamFi-x/streamfi-frontend)) is designed to call these contracts' cheap read-only accessors — `subscription.is_active(subscriber, creator)` and `token_gated_access.has_access(gate_id, holder)` — before minting signed Mux playback tokens for gated content. That gives us CDN-level access enforcement backed by on-chain state, with no periodic reconciliation job needed.
+
+Payment flows (`tip-goal-escrow.contribute`, `revenue-split.pay`, `payout-scheduler.deposit`) are called directly by user wallets or by keeper bots, with the frontend surfacing events published by each contract for live UI updates.
 
 ## Contributing
 

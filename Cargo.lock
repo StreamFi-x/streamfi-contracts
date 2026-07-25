@@ -1536,7 +1536,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "streamfi-payout-scheduler"
+version = "0.1.0"
+dependencies = [
+ "soroban-sdk",
+]
+
+[[package]]
+name = "streamfi-revenue-split"
+version = "0.1.0"
+dependencies = [
+ "soroban-sdk",
+]
+
+[[package]]
 name = "streamfi-subscription"
+version = "0.1.0"
+dependencies = [
+ "soroban-sdk",
+]
+
+[[package]]
+name = "streamfi-tip-goal-escrow"
+version = "0.1.0"
+dependencies = [
+ "soroban-sdk",
+]
+
+[[package]]
+name = "streamfi-token-gated-access"
 version = "0.1.0"
 dependencies = [
  "soroban-sdk",
