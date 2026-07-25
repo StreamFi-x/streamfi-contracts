@@ -1,1 +1,34 @@
-target
+# Rust
+/target
+/**/target
+Cargo.lock.tmp
+*.rs.bk
+*.pdb
+
+# Soroban build artifacts
+*.wasm
+!contracts/**/*.expected.wasm
+
+# Soroban SDK test snapshots (auto-generated per run)
+contracts/**/test_snapshots/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Local env / secrets
+.env
+.env.local
+.env.*.local
+*.secret
+.stellar/
+
+# Coverage
+tarpaulin-report.html
+cobertura.xml
+lcov.info
+
+# Local Claude Code settings
+.claude/settings.local.json
